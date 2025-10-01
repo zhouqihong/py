@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1.4 云平台的使用介绍 - Python数据科学入门</title>
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1{margin:8px 0 12px}
+    h2{margin-top:28px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+    h3{margin-top:24px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-top:24px}
+    .list{padding-left:24px;line-height:1.8}
+    .list li{margin-bottom:10px}
+    .linkback{display:inline-flex;align-items:center;margin-top:14px;padding:8px 16px;background:#f1f5f9;border-radius:8px;font-weight:500}
+    .linkback:hover{background:#e2e8f0}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0;font-family:Monaco,Consolas,monospace}
+    pre {
+      background: #f6f8fa;
+      color: #24292e;
+      padding: 20px;
+      border-radius: 6px;
+      overflow: auto;
+      margin: 20px 0;
+      line-height: 1.45;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
+      border: 1px solid #e1e4e8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: 14px;
+    }
+    .note{background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+    
+    /* 自定义样式 */
+    .platform-url {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      font-weight: 500;
+      margin: 10px 0;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .step-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+    .step-image {
+      width: 100%;
+      height: 180px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .step-caption {
+      font-size: 14px;
+      color: #64748b;
+    }
+    .feature-list {
+      background: #f0f9ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+    .feature-list li {
+      margin-bottom: 8px;
+      list-style-type: none;
+      position: relative;
+      padding-left: 24px;
+    }
+    .feature-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #0ea5e9;
+      font-weight: bold;
+    }
+    .video-container {
+      margin: 24px 0;
+      text-align: center;
+    }
+    .video-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 20px;
+      background: #fb7299;
+      color: white;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .video-link:hover {
+      background: #f1417d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(251, 114, 153, 0.3);
+    }
+    .video-icon {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="linkback" href="charpter1.html">← 返回第一章</a>
+    <h1>1.4 云平台的使用介绍</h1>
+    
+    <div class="card">
+      <h2>1.4.1 平台地址</h2>
+      <p>平台网址：</p>
+      <a href="https://cloud.tencent.com/product/cloudstudio" class="platform-url" target="_blank">
+        https://cloud.tencent.com/product/cloudstudio
+      </a>
+    </div>
+    
+    <div class="card">
+      <h2>1.4.2 平台简介</h2>
+      <p>Cloud Studio（云端 IDE）是基于浏览器的集成式开发环境，为开发者提供了一个稳定的云端工作站。</p>
+      
+      <div class="feature-list">
+        <ul>
+          <li>支持CPU与GPU的访问</li>
+          <li>无需安装，随时随地打开浏览器即可使用</li>
+          <li>目前是免费平台</li>
+          <li>提供完整的开发环境</li>
+          <li>支持多种编程语言和框架</li>
+        </ul>
+      </div>
+      
+      <p>用户在使用 Cloud Studio 时无需安装任何软件，只需拥有浏览器和网络连接，即可开始编程工作。</p>
+      
+      <div class="video-container">
+        <a href="https://www.bilibili.com/video/BV1iuxjewEyF/?spm_id_from=333.337.search-card.all.click" class="video-link" target="_blank">
+          <span class="video-icon">▶</span> Cloud Studio 使用视频教程
+        </a>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>1.4.3 使用步骤</h2>
+      <ol class="list">
+        <li>右上角点击"免费注册"；</li>
+        <li>使用微信或邮箱注册；</li>
+        <li>选择"立即使用"；</li>
+        <li>选择"Jupyter Notebook"；</li>
+        <li>等待一段时间后，选择"文件"，新建"文件"；</li>
+        <li>选择"Jupyter notebook"；</li>
+        <li>点击"三角按钮"，弹出配置Python环境，选择Python3.11.1，就可以运行代码。</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>

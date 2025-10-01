@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第9章 · 文件读写</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1{margin:8px 0 12px}
+    h2{margin-top:28px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+    h3{margin-top:24px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-top:24px}
+    .list{padding-left:24px;line-height:1.8}
+    .list li{margin-bottom:10px}
+    .linkback{display:inline-flex;align-items:center;margin-top:14px;padding:8px 16px;background:#f1f5f9;border-radius:8px;font-weight:500}
+    .linkback:hover{background:#e2e8f0}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0;font-family:Monaco,Consolas,monospace}
+    pre {
+      background: #f6f8fa;
+      color: #24292e;
+      padding: 20px;
+      border-radius: 6px;
+      overflow: auto;
+      margin: 20px 0;
+      line-height: 1.45;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
+      border: 1px solid #e1e4e8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: 14px;
+    }
+    .note{background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+    .chapter-nav{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-top:32px}
+    .chapter-card{background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s ease}
+    .chapter-card:hover{transform:translateY(-4px);box-shadow:0 12px 20px rgba(2,8,23,.08)}
+    .chapter-card h3{margin-top:0;font-size:18px}
+    .chapter-number{display:inline-block;background:#0ea5e9;color:white;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;margin-right:10px;font-weight:bold}
+    
+    /* Jupyter Notebook风格语法高亮 */
+    .hljs-comment,
+    .hljs-quote {color: #8c8c8c; font-style: italic;}
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {color: #d73a49;}
+    .hljs-number,
+    .hljs-literal {color: #005cc5;}
+    .hljs-string,
+    .hljs-doctag,
+    .hljs-formula {color: #032f62;}
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {color: #6f42c1;}
+    .hljs-built_in,
+    .hljs-class .hljs-title {color: #6f42c1;}
+    .hljs-params {color: #24292e;}
+    .hljs-attribute {color: #6f42c1;}
+    .hljs-name {color: #22863a;}
+    .hljs-tag {color: #22863a;}
+    .hljs-variable,
+    .hljs-template-variable {color: #e36209;}
+    .hljs-regexp,
+    .hljs-link {color: #d73a49;}
+    .hljs-symbol,
+    .hljs-bullet {color: #e36209;}
+    .hljs-meta {color: #6f42c1;}
+    .hljs-meta .hljs-keyword {color: #6f42c1;}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a class="linkback" href="index.html">← 返回首页</a>
+    <h1>第9章 · 文件读写</h1>
+    
+    <div class="card">
+      <h2>Python文件操作</h2>
+      <p>文件读写是数据处理和分析的基础技能。本章将介绍Python中常见的文件格式及其读写方法，包括文本文件、CSV文件和Excel文件，帮助您掌握数据导入导出的核心技能。</p>
+      
+      <div class="note">
+        <strong>学习目标：</strong>完成本章后，您将能够理解不同文件格式的特点和用途，掌握文本文件、CSV文件和Excel文件的读写方法，为数据分析和处理打下坚实基础。
+      </div>
+      
+      <h3>本章内容概览</h3>
+      <ul class="list">
+        <li>文件后缀名及用途：常见文件格式介绍</li>
+        <li>txt文档的读写方法：文本文件操作基础</li>
+        <li>CSV文档的读写：表格数据处理</li>
+        <li>EXCEL文档的读写：Excel文件操作</li>
+      </ul>
+      
+      <h3>文件后缀名及用途</h3>
+      <pre><code><span class="hljs-comment"># Python中常见的文件格式及其用途</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 常见文件格式 ==="</span>)
+file_formats = {
+    <span class="hljs-string">".txt"</span>: <span class="hljs-string">"纯文本文件，存储简单文本数据"</span>,
+    <span class="hljs-string">".csv"</span>: <span class="hljs-string">"逗号分隔值文件，存储表格数据"</span>,
+    <span class="hljs-string">".xlsx"</span>: <span class="hljs-string">"Excel文件，存储复杂表格和数据"</span>,
+    <span class="hljs-string">".json"</span>: <span class="hljs-string">"JSON格式文件，存储结构化数据"</span>,
+    <span class="hljs-string">".xml"</span>: <span class="hljs-string">"XML格式文件，存储结构化数据"</span>,
+    <span class="hljs-string">".py"</span>: <span class="hljs-string">"Python源代码文件"</span>,
+    <span class="hljs-string">".html"</span>: <span class="hljs-string">"网页文件"</span>,
+    <span class="hljs-string">".jpg/.png"</span>: <span class="hljs-string">"图像文件"</span>
+}
+
+<span class="hljs-keyword">for</span> extension, description <span class="hljs-keyword">in</span> file_formats.items():
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f"<span class="hljs-subst">{extension}</span>: <span class="hljs-subst">{description}</span>"</span>)
+
+<span class="hljs-comment"># 文件路径操作</span>
+<span class="hljs-keyword">import</span> os
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 文件路径操作 ==="</span>)
+current_dir = os.getcwd()
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"当前工作目录: <span class="hljs-subst">{current_dir}</span>"</span>)
+
+<span class="hljs-comment"># 检查文件是否存在</span>
+file_path = <span class="hljs-string">"example.txt"</span>
+file_exists = os.path.exists(file_path)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"文件 '<span class="hljs-subst">{file_path}</span>' 是否存在: <span class="hljs-subst">{file_exists}</span>"</span>)</code></pre>
+      
+      <h3>txt文档的读写方法</h3>
+      <pre><code><span class="hljs-comment"># 文本文件读写示例</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 文本文件读写 ==="</span>)
+
+<span class="hljs-comment"># 写入文本文件</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"example.txt"</span>, <span class="hljs-string">"w"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    file.write(<span class="hljs-string">"这是第一行文本\n"</span>)
+    file.write(<span class="hljs-string">"这是第二行文本\n"</span>)
+    file.write(<span class="hljs-string">"这是第三行文本\n"</span>)
+    file.write(<span class="hljs-string">"Python文件读写操作示例\n"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"文件写入完成"</span>)
+
+<span class="hljs-comment"># 读取文本文件 - 逐行读取</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 逐行读取文件 ==="</span>)
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"example.txt"</span>, <span class="hljs-string">"r"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    <span class="hljs-keyword">for</span> line_num, line <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(file, <span class="hljs-number">1</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f"第<span class="hljs-subst">{line_num}</span>行: <span class="hljs-subst">{line.strip()}</span>"</span>)
+
+<span class="hljs-comment"># 读取整个文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 读取整个文件 ==="</span>)
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"example.txt"</span>, <span class="hljs-string">"r"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    content = file.read()
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"文件内容:"</span>)
+    <span class="hljs-built_in">print</span>(content)
+
+<span class="hljs-comment"># 追加内容到文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 追加内容 ==="</span>)
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"example.txt"</span>, <span class="hljs-string">"a"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    file.write(<span class="hljs-string">"这是追加的内容\n"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"内容追加完成"</span>)</code></pre>
+      
+      <h3>CSV文档的读写</h3>
+      <pre><code><span class="hljs-keyword">import</span> csv
+<span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== CSV文件读写 ==="</span>)
+
+<span class="hljs-comment"># 使用csv模块写入CSV文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"使用csv模块写入CSV文件..."</span>)
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"data.csv"</span>, <span class="hljs-string">"w"</span>, newline=<span class="hljs-string">""</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    writer = csv.writer(file)
+    <span class="hljs-comment"># 写入表头</span>
+    writer.writerow([<span class="hljs-string">"姓名"</span>, <span class="hljs-string">"年龄"</span>, <span class="hljs-string">"城市"</span>, <span class="hljs-string">"工资"</span>])
+    <span class="hljs-comment">// 写入数据</span>
+    writer.writerow([<span class="hljs-string">"张三"</span>, <span class="hljs-number">25</span>, <span class="hljs-string">"北京"</span>, <span class="hljs-number">5000</span>])
+    writer.writerow([<span class="hljs-string">"李四"</span>, <span class="hljs-number">30</span>, <span class="hljs-string">"上海"</span>, <span class="hljs-number">8000</span>])
+    writer.writerow([<span class="hljs-string">"王五"</span>, <span class="hljs-number">35</span>, <span class="hljs-string">"广州"</span>, <span class="hljs-number">6000</span>])
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"CSV文件写入完成"</span>)
+
+<span class="hljs-comment">// 使用csv模块读取CSV文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n使用csv模块读取CSV文件..."</span>)
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"data.csv"</span>, <span class="hljs-string">"r"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> file:
+    reader = csv.reader(file)
+    <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> reader:
+        <span class="hljs-built_in">print</span>(row)
+
+<span class="hljs-comment">// 使用pandas读取CSV文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n使用pandas读取CSV文件..."</span>)
+df = pd.read_csv(<span class="hljs-string">"data.csv"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"数据框内容:"</span>)
+<span class="hljs-built_in">print</span>(df)
+
+<span class="hljs-comment">// 使用pandas写入CSV文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n使用pandas写入CSV文件..."</span>)
+<span class="hljs-comment">// 创建新数据</span>
+new_data = {
+    <span class="hljs-string">"姓名"</span>: [<span class="hljs-string">"赵六"</span>, <span class="hljs-string">"孙七"</span>],
+    <span class="hljs-string">"年龄"</span>: [<span class="hljs-number">28</span>, <span class="hljs-number">32</span>],
+    <span class="hljs-string">"城市"</span>: [<span class="hljs-string">"深圳"</span>, <span class="hljs-string">"杭州"</span>],
+    <span class="hljs-string">"工资"</span>: [<span class="hljs-number">7500</span>, <span class="hljs-number">9000</span>]
+}
+new_df = pd.DataFrame(new_data)
+new_df.to_csv(<span class="hljs-string">"new_data.csv"</span>, index=<span class="hljs-literal">False</span>, encoding=<span class="hljs-string">"utf-8"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"新CSV文件写入完成"</span>)</code></pre>
+      
+      <h3>EXCEL文档的读写</h3>
+      <pre><code><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== Excel文件读写 ==="</span>)
+
+<span class="hljs-comment">// 创建示例数据</span>
+data = {
+    <span class="hljs-string">"产品名称"</span>: [<span class="hljs-string">"笔记本电脑"</span>, <span class="hljs-string">"智能手机"</span>, <span class="hljs-string">"平板电脑"</span>, <span class="hljs-string">"智能手表"</span>],
+    <span class="hljs-string">"品牌"</span>: [<span class="hljs-string">"Dell"</span>, <span class="hljs-string">"Huawei"</span>, <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Xiaomi"</span>],
+    <span class="hljs-string">"价格"</span>: [<span class="hljs-number">5999</span>, <span class="hljs-number">3999</span>, <span class="hljs-number">3299</span>, <span class="hljs-number">899</span>],
+    <span class="hljs-string">"库存"</span>: [<span class="hljs-number">50</span>, <span class="hljs-number">100</span>, <span class="hljs-number">75</span>, <span class="hljs-number">200</span>],
+    <span class="hljs-string">"销量"</span>: [<span class="hljs-number">120</span>, <span class="hljs-number">300</span>, <span class="hljs-number">180</span>, <span class="hljs-number">500</span>]
+}
+
+df = pd.DataFrame(data)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"原始数据:"</span>)
+<span class="hljs-built_in">print</span>(df)
+
+<span class="hljs-comment">// 写入Excel文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n写入Excel文件..."</span>)
+df.to_excel(<span class="hljs-string">"products.xlsx"</span>, index=<span class="hljs-literal">False</span>, sheet_name=<span class="hljs-string">"产品信息"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"Excel文件写入完成"</span>)
+
+<span class="hljs-comment">// 读取Excel文件</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n读取Excel文件..."</span>)
+excel_data = pd.read_excel(<span class="hljs-string">"products.xlsx"</span>, sheet_name=<span class="hljs-string">"产品信息"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"从Excel读取的数据:"</span>)
+<span class="hljs-built_in">print</span>(excel_data)
+
+<span class="hljs-comment">// 多个工作表操作</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n多个工作表操作..."</span>)
+<span class="hljs-comment">// 创建第二个工作表数据</span>
+sales_data = {
+    <span class="hljs-string">"月份"</span>: [<span class="hljs-string">"1月"</span>, <span class="hljs-string">"2月"</span>, <span class="hljs-string">"3月"</span>, <span class="hljs-string">"4月"</span>, <span class="hljs-string">"5月"</span>],
+    <span class="hljs-string">"销售额"</span>: [<span class="hljs-number">150000</span>, <span class="hljs-number">180000</span>, <span class="hljs-number">220000</span>, <span class="hljs-number">190000</span>, <span class="hljs-number">250000</span>],
+    <span class="hljs-string">"利润"</span>: [<span class="hljs-number">45000</span>, <span class="hljs-number">54000</span>, <span class="hljs-number">66000</span>, <span class="hljs-number">57000</span>, <span class="hljs-number">75000</span>]
+}
+sales_df = pd.DataFrame(sales_data)
+
+<span class="hljs-comment">// 使用ExcelWriter写入多个工作表</span>
+<span class="hljs-keyword">with</span> pd.ExcelWriter(<span class="hljs-string">"company_data.xlsx"</span>) <span class="hljs-keyword">as</span> writer:
+    df.to_excel(writer, sheet_name=<span class="hljs-string">"产品信息"</span>, index=<span class="hljs-literal">False</span>)
+    sales_df.to_excel(writer, sheet_name=<span class="hljs-string">"销售数据"</span>, index=<span class="hljs-literal">False</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"多工作表Excel文件写入完成"</span>)
+
+<span class="hljs-comment">// 读取多个工作表</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n读取多个工作表..."</span>)
+products_sheet = pd.read_excel(<span class="hljs-string">"company_data.xlsx"</span>, sheet_name=<span class="hljs-string">"产品信息"</span>)
+sales_sheet = pd.read_excel(<span class="hljs-string">"company_data.xlsx"</span>, sheet_name=<span class="hljs-string">"销售数据"</span>)
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"产品信息表:"</span>)
+<span class="hljs-built_in">print</span>(products_sheet)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n销售数据表:"</span>)
+<span class="hljs-built_in">print</span>(sales_sheet)</code></pre>
+    </div>
+    
+    <div class="card">
+      <h2>子页面导航</h2>
+      <ul class="list">
+        <li><a href="chapter9_1.html">9.1 文件后缀名及用途</a></li>
+        <li><a href="chapter9_2.html">9.2 txt文档的读写方法</a></li>
+        <li><a href="chapter9_3.html">9.3 CSV文档的读写</a></li>
+        <li><a href="chapter9_4.html">9.4 EXCEL文档的读写</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

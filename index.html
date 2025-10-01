@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python基础与数据挖掘 · 教学网站</title>
+  <meta name="description" content="Python基础与数据挖掘课程主页：课程简介、教师简介、教学资源、模型资源与章节目录。">
+  <style>
+    :root{
+      --bg:#ffffff;
+      --fg:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --brand:#0ea5e9;
+      --brand-strong:#0284c7;
+      --accent:#10b981;
+      --card:#ffffff;
+      --shadow:0 8px 30px rgba(2,8,23,.06);
+      --radius:20px;
+    }
+    ::selection{background:#dbeafe;}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+    }
+    a{color:var(--brand);text-decoration:none}
+    a:hover{color:var(--brand-strong)}
+    .container{max-width:1150px;margin:0 auto;padding:0 20px}
+    .nav{
+      position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);
+      backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.3px}
+    .brand-logo{
+      width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 8px 24px rgba(2,132,199,.25)
+    }
+    .nav a{font-weight:600;margin-left:18px}
+    .btn{
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;
+      padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--fg);font-weight:700;box-shadow:var(--shadow)
+    }
+    .btn.primary{background:var(--fg);color:#fff;border-color:var(--fg)}
+    .btn.primary:hover{background:#111827}
+    .btn.ghost{background:#fff}
+    .hero{padding:64px 0}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .hero h1{font-size:42px;line-height:1.15;margin:10px 0 14px}
+    .hero p{color:var(--muted);font-size:18px}
+    .hero .cta{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .hero-visual{
+      background:conic-gradient(from 90deg at 60% 40%,#f8fafc, #e0f2fe, #dcfce7, #f8fafc);
+      border:1px solid var(--line);border-radius:var(--radius);height:320px;box-shadow:var(--shadow);position:relative;overflow:hidden
+    }
+    .chip{
+      position:absolute;inset:auto auto 16px 16px;background:#fff;border:1px solid var(--line);
+      padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);font-weight:700
+    }
+    section{padding:56px 0;border-top:1px solid var(--line)}
+    h2{font-size:28px;margin:0 0 18px}
+    .muted{color:var(--muted)}
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(3,1fr)}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)
+    }
+    .card h3{margin:6px 0 8px}
+    .list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+    .list li{
+      background:#fff;border:1px dashed var(--line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center
+    }
+    .badge{font-size:12px;color:#0b7; background:#ecfdf5;border:1px solid #d1fae5;padding:4px 8px;border-radius:999px}
+    .link-mini{font-size:14px}
+    .two{grid-template-columns:repeat(2,1fr)}
+    .faq details{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
+    .faq details+details{margin-top:10px}
+    .faq summary{cursor:pointer;font-weight:700}
+    footer{padding:28px 0;color:var(--muted)}
+    @media (max-width:960px){
+      .grid.cards{grid-template-columns:1fr 1fr}
+      .hero-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .grid.cards,.two{grid-template-columns:1fr}
+      .nav a.hide-sm{display:none}
+    }
+    #topbtn{
+      position:fixed;right:18px;bottom:18px;opacity:0;pointer-events:none;transition:.2s;
+      border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 12px;box-shadow:var(--shadow);font-weight:800
+    }
+    #topbtn.show{opacity:1;pointer-events:auto}
+    .kicker{display:inline-block;font-weight:800;letter-spacing:.08em;color:var(--brand-strong);text-transform:uppercase;font-size:12px}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true"></span>
+        <span>Python基础与数据挖掘</span>
+      </div>
+      <div>
+        <a href="#about" class="hide-sm">课程简介</a>
+        <a href="#teacher" class="hide-sm">教师简介</a>
+        <a href="#resources" class="hide-sm">教学资源</a>
+        <a href="#models" class="hide-sm">模型资源</a>
+        <a href="#syllabus" class="hide-sm">章节目录</a>
+        <a href="#faq" class="hide-sm">FAQ</a>
+        <a href="#resources" class="btn ghost" title="快速查看资源">📚 资源</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero container">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker">春 / 秋  2025-2026年重庆市首批“人工智能+”重点建设课程</span>
+        <h1>面向人文社科的 <span style="background:linear-gradient(90deg,var(--brand),var(--accent));-webkit-background-clip:text;color:transparent">Python基础与数据挖掘</span></h1>
+        <p class="muted">
+          从零起步到数据驱动：覆盖 Python 语法、数据结构、Pandas/Numpy、可视化、文本挖掘与聚类主题词分析，
+          并引入大模型赋能的数据分析工作流与伦理规范。
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#syllabus">查看章节目录</a>
+          <a class="btn" href="#models">大模型资源</a>
+          <a class="btn" href="#resources">教学资料下载</a>
+        </div>
+      </div>
+      <div class="hero-visual" role="img" aria-label="抽象数据网格可视化">
+        <div class="chip">✅ 零基础友好 · 项目导向 · 可复用模板</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="container grid two">
+      <div class="card">
+        <h2>课程简介</h2>
+        <p class="muted">
+          本课程定位为通识/专业基础课，采用“讲解 + 代码演示 + 实战作业”的混合式教学。
+          学完后你将能独立完成数据清洗、可视化、文本挖掘与基础统计分析，并理解如何用大语言模型提升效率。
+        </p>
+        <ul class="list" aria-label="课程要点">
+          <li><span>面向任务的学习单元</span><span class="badge">实践优先</span></li>
+          <li><span>统一数据分析模板（含报告/PPT）</span><span class="badge">可复用</span></li>
+          <li><span>强调学术规范与AI伦理</span><span class="badge">合规</span></li>
+        </ul>
+      </div>
+      <div id="teacher" class="card">
+        <h2>教师简介</h2>
+        <p class="muted">
+          主讲：周启红（方向：计算语言学、数据科学、人工智能）。
+          近年专注于 AI 赋能的人文社科研究方法与教学创新。
+          <br>
+        个人主页：<a class="personal-link"   href="https://zhouqihong.github.io/personal/" target="_blank">https://zhouqihong.github.io/personal/</a>
+          </p>
+        <ul class="list" aria-label="教师信息">
+          <li><span>研究方向：NLP、文本挖掘、学习分析</span><span class="badge">Research</span></li>
+          <li><span>教学风格：结构清晰、案例驱动、注重反馈</span><span class="badge">Teaching</span></li>
+          <li><span>联系方式：zhouqihong338@hotmail.com</span><span class="badge">Contact</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources">
+    <div class="container">
+      <h2>课程教学资源</h2>
+      <p class="muted">配套讲义、代码、数据集与作业模板。</p>
+      <div class="grid cards">
+        <div class="card">
+          <h3>讲义 & PPT</h3>
+          <p class="muted">每章附讲义 PDF 与课堂示例。</p>
+          <a class="link-mini" href="resources/lecture-sample.pdf" download>下载 lecture-sample.pdf →</a>
+        </div>
+        <div class="card">
+          <h3>示例代码</h3>
+          <p class="muted">Jupyter Notebook 与可复用脚本。</p>
+          <a class="link-mini" href="resources/sample_notebook.ipynb" download>下载 sample_notebook.ipynb →</a>
+        </div>
+        <div class="card">
+          <h3>数据集</h3>
+          <p class="muted">课堂小项目与期末项目使用的数据。</p>
+          <a class="link-mini" href="resources/datasets.zip" download>下载 datasets.zip →</a>
+        </div>
+        <div class="card">
+          <h3>作业模板</h3>
+          <p class="muted">报告、PPT、代码提交规范一套齐全。</p>
+          <a class="link-mini" href="resources/report_template.docx" download>下载 report_template.docx →</a>
+        </div>
+        <div class="card">
+          <h3>工具环境</h3>
+          <p class="muted">Python/VSCode/Conda 安装与环境说明。</p>
+          <a class="link-mini" href="resources/environment.md" download>查看 environment.md →</a>
+        </div>
+        <div class="card">
+          <h3>评估与标准</h3>
+          <p class="muted">评分细则、学术规范与AI使用说明。</p>
+          <a class="link-mini" href="resources/rubric.pdf" download>查看 rubric.pdf →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="models">
+    <div class="container">
+      <h2>链接模型的资源</h2>
+      <p class="muted">常用大语言模型与嵌入/向量检索工具。</p>
+      <div class="grid cards">
+        <div class="card">
+          <h3>在线对话模型</h3>
+          <ul class="list">
+           <li><span>聊天助教（课程问答）</span><a class="link-mini" href="https://www.doubao.com/chat/7372912125423173667?type=1">打开 →</a></li>
+            <li><span>超星助教（课程内容）</span><a class="link-mini"            href="https://mooc2-ans.chaoxing.com/mooc2-ans/mycourse/tch?courseid=250399566&clazzid=116041962&cpi=34224657&enc=f058e16806bd1b4734f223e1fcbca9d2&t=1757997239934&pageHeader=-1&v=2&hideHead=0">打开 →</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>本地/私有部署</h3>
+          <ul class="list">
+            <li><span>开源模型（Ollama/LM Studio）</span><a class="link-mini" 		href="https://ollama.com/">说明 →</a></li>
+            <li><span>向量库（FAISS/pgvector）</span><a class="link-mini" href="https://github.com/facebookresearch/faiss">示例 →</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>RAG 工作流</h3>
+          <ul class="list">
+            <li><span>资料检索 + 摘要</span><a class="link-mini" href="https://github.com/run-llama/llama_index">示例 →</a></li>
+            <li><span>代码助手 + 文档问答</span><a class="link-mini" href="https://github.com/hwchase17/langchain">示例 →</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <section id="syllabus">
+    <div class="container">
+      <h2>章节目录</h2>
+      <p class="muted">点击进入对应章节</p>
+      <ul class="list">
+        <li><span>第一章 Python简介与工具安装</span><a class="link-mini" href="charpter1.html">进入 →</a></li>
+        <li><span>第二章 语法基础</span><a class="link-mini" href="charpter2.html">进入 →</a></li>
+        <li><span>第三章 常见语句</span><a class="link-mini" href="charpter3.html">进入 →</a></li>
+        <li><span>第四章 数据类型上</span><a class="link-mini" href="charpter4.html">进入 →</a></li>
+        <li><span>第五章 数据类型下</span><a class="link-mini" href="charpter5.html">进入 →</a></li>
+        <li><span>第六章 函数与模块</span><a class="link-mini" href="charpter6.html">进入 →</a></li>
+        <li><span>第七章 Pandas与Numpy</span><a class="link-mini" href="charpter7.html">进入 →</a></li>
+        <li><span>第八章 Matplotlib</span><a class="link-mini" href="charpter8.html">进入 →</a></li>
+        <li><span>第九章 文件读写</span><a class="link-mini" href="charpter9.html">进入 →</a></li>
+        <li><span>第十章 数据预处理及分析</span><a class="link-mini" href="charpter10.html">进入 →</a></li>
+        <li><span>第十一章 数据分析与统计方法</span><a class="link-mini" href="charpter11.html">进入 →</a></li>
+        <li><span>第十二章 NLP常用工具与文本挖掘</span><a class="link-mini" href="charpter12.html">进入 →</a></li>
+        <li><span>第十三章 聚类分析与主题词分析</span><a class="link-mini" href="charpter13.html">进入 →</a></li>
+        <li><span>第十四章 Python在分析外语中的运用</span><a class="link-mini" href="charpter14.html">进入 →</a></li>
+        <li><span>第十五章 数据抓取与数据伦理</span><a class="link-mini" href="charpter15.html">进入 →</a></li>
+        <li><span>第十六章 大模型赋能数据分析</span><a class="link-mini" href="charpter16.html">进入 →</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <details>
+          <summary>需要编程基础吗？</summary>
+          <p class="muted">不需要。课程从安装环境与基础语法开始，提供可运行的 Notebook 与样例数据。</p>
+        </details>
+        <details>
+          <summary>如何提交作业与项目？</summary>
+          <p class="muted">统一通过课程平台提交：代码（ipynb/py）+ 报告（docx/pdf）+ 可视化图表。</p>
+        </details>
+        <details>
+          <summary>可以使用大语言模型辅助吗？</summary>
+          <p class="muted">允许并鼓励合理使用，请在报告中注明使用场景、提示词与贡献比例，遵循学术规范与数据伦理。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="grid two">
+        <p>© 2025 Python基础与数据挖掘 · 保留所有权利</p>
+        <p style="text-align:right">版本 1.0 · <a href="#top">回到顶部</a></p>
+      </div>
+    </div>
+  
+  <footer>
+
+  <button id="topbtn" aria-label="返回顶部">↑</button>
+
+  <script>
+    const topbtn = document.getElementById('topbtn');
+    addEventListener('scroll',()=>{ topbtn.classList.toggle('show', scrollY>300) });
+    topbtn.onclick = ()=> scrollTo({top:0,behavior:'smooth'});
+  </script>
+</body>
+</html>

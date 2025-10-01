@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第10章 · 数据预处理及分析</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1{margin:8px 0 12px}
+    h2{margin-top:28px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+    h3{margin-top:24px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-top:24px}
+    .list{padding-left:24px;line-height:1.8}
+    .list li{margin-bottom:10px}
+    .linkback{display:inline-flex;align-items:center;margin-top:14px;padding:8px 16px;background:#f1f5f9;border-radius:8px;font-weight:500}
+    .linkback:hover{background:#e2e8f0}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0;font-family:Monaco,Consolas,monospace}
+    pre {
+      background: #f6f8fa;
+      color: #24292e;
+      padding: 20px;
+      border-radius: 6px;
+      overflow: auto;
+      margin: 20px 0;
+      line-height: 1.45;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
+      border: 1px solid #e1e4e8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: 14px;
+    }
+    .note{background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+    .chapter-nav{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-top:32px}
+    .chapter-card{background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s ease}
+    .chapter-card:hover{transform:translateY(-4px);box-shadow:0 12px 20px rgba(2,8,23,.08)}
+    .chapter-card h3{margin-top:0;font-size:18px}
+    .chapter-number{display:inline-block;background:#0ea5e9;color:white;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;margin-right:10px;font-weight:bold}
+    
+    /* Jupyter Notebook风格语法高亮 */
+    .hljs-comment,
+    .hljs-quote {color: #8c8c8c; font-style: italic;}
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {color: #d73a49;}
+    .hljs-number,
+    .hljs-literal {color: #005cc5;}
+    .hljs-string,
+    .hljs-doctag,
+    .hljs-formula {color: #032f62;}
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {color: #6f42c1;}
+    .hljs-built_in,
+    .hljs-class .hljs-title {color: #6f42c1;}
+    .hljs-params {color: #24292e;}
+    .hljs-attribute {color: #6f42c1;}
+    .hljs-name {color: #22863a;}
+    .hljs-tag {color: #22863a;}
+    .hljs-variable,
+    .hljs-template-variable {color: #e36209;}
+    .hljs-regexp,
+    .hljs-link {color: #d73a49;}
+    .hljs-symbol,
+    .hljs-bullet {color: #e36209;}
+    .hljs-meta {color: #6f42c1;}
+    .hljs-meta .hljs-keyword {color: #6f42c1;}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a class="linkback" href="index.html">← 返回首页</a>
+    <h1>第10章 · 数据预处理及分析</h1>
+    
+    <div class="card">
+      <h2>数据预处理与分析</h2>
+      <p>数据预处理是数据科学项目中至关重要的环节，直接影响分析结果的准确性和模型性能。本章将介绍数据预处理的核心技术，包括缺失值和异常值处理、特征缩放与编码，以及探索性数据分析方法。</p>
+      
+      <div class="note">
+        <strong>学习目标：</strong>完成本章后，您将能够识别和处理数据中的缺失值与异常值，掌握特征缩放和编码技术，并能够进行探索性数据分析以发现数据中的模式和洞察。
+      </div>
+      
+      <h3>本章内容概览</h3>
+      <ul class="list">
+        <li>缺失/异常值处理：识别和处理数据质量问题</li>
+        <li>特征缩放与编码：数据标准化和特征工程</li>
+        <li>探索性数据分析：数据可视化和统计分析</li>
+      </ul>
+      
+      <h3>缺失/异常值处理</h3>
+      <pre><code><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">from</span> sklearn.impute <span class="hljs-keyword">import</span> SimpleImputer
+
+<span class="hljs-comment"># 创建包含缺失值和异常值的示例数据</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 缺失值与异常值处理 ==="</span>)
+data = {
+    <span class="hljs-string">'年龄'</span>: [<span class="hljs-number">25</span>, <span class="hljs-number">30</span>, np.nan, <span class="hljs-number">35</span>, <span class="hljs-number">28</span>, <span class="hljs-number">150</span>, <span class="hljs-number">32</span>, np.nan],  <span class="hljs-comment"># 150是异常值</span>
+    <span class="hljs-string">'收入'</span>: [<span class="hljs-number">50000</span>, <span class="hljs-number">60000</span>, <span class="hljs-number">55000</span>, np.nan, <span class="hljs-number">52000</span>, <span class="hljs-number">1000000</span>, np.nan, <span class="hljs-number">58000</span>],  <span class="hljs-comment"># 1000000是异常值</span>
+    <span class="hljs-string">'城市'</span>: [<span class="hljs-string">'北京'</span>, <span class="hljs-string">'上海'</span>, np.nan, <span class="hljs-string">'广州'</span>, <span class="hljs-string">'深圳'</span>, <span class="hljs-string">'北京'</span>, <span class="hljs-string">'上海'</span>, <span class="hljs-string">'杭州'</span>]
+}
+
+df = pd.DataFrame(data)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"原始数据:"</span>)
+<span class="hljs-built_in">print</span>(df)
+
+<span class="hljs-comment"># 检查缺失值</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n缺失值统计:"</span>)
+<span class="hljs-built_in">print</span>(df.isnull().sum())
+
+<span class="hljs-comment"># 处理缺失值 - 数值列用均值填充</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n处理缺失值..."</span>)
+df_cleaned = df.copy()
+df_cleaned[<span class="hljs-string">'年龄'</span>].fillna(df_cleaned[<span class="hljs-string">'年龄'</span>].mean(), inplace=<span class="hljs-literal">True</span>)
+df_cleaned[<span class="hljs-string">'收入'</span>].fillna(df_cleaned[<span class="hljs-string">'收入'</span>].mean(), inplace=<span class="hljs-literal">True</span>)
+df_cleaned[<span class="hljs-string">'城市'</span>].fillna(<span class="hljs-string">'未知'</span>, inplace=<span class="hljs-literal">True</span>)
+
+<span class="hljs-comment"># 检测和处理异常值</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n检测异常值..."</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">detect_outliers</span>(<span class="hljs-params">data</span>):
+    Q1 = data.quantile(<span class="hljs-number">0.25</span>)
+    Q3 = data.quantile(<span class="hljs-number">0.75</span>)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - <span class="hljs-number">1.5</span> * IQR
+    upper_bound = Q3 + <span class="hljs-number">1.5</span> * IQR
+    outliers = data[(data &lt; lower_bound) | (data &gt; upper_bound)]
+    <span class="hljs-keyword">return</span> outliers
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"年龄异常值:"</span>, detect_outliers(df_cleaned[<span class="hljs-string">'年龄'</span>]).tolist())
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"收入异常值:"</span>, detect_outliers(df_cleaned[<span class="hljs-string">'收入'</span>]).tolist())
+
+<span class="hljs-comment"># 处理异常值 - 使用中位数替换</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n处理异常值..."</span>)
+age_median = df_cleaned[<span class="hljs-string">'年龄'</span>].median()
+income_median = df_cleaned[<span class="hljs-string">'收入'</span>].median()
+
+df_cleaned.loc[df_cleaned[<span class="hljs-string">'年龄'</span>] &gt; <span class="hljs-number">100</span>, <span class="hljs-string">'年龄'</span>] = age_median
+df_cleaned.loc[df_cleaned[<span class="hljs-string">'收入'</span>] &gt; <span class="hljs-number">200000</span>, <span class="hljs-string">'收入'</span>] = income_median
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"处理后的数据:"</span>)
+<span class="hljs-built_in">print</span>(df_cleaned)</code></pre>
+      
+      <h3>特征缩放与编码</h3>
+      <pre><code><span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> StandardScaler, MinMaxScaler, LabelEncoder, OneHotEncoder
+<span class="hljs-keyword">from</span> sklearn.compose <span class="hljs-keyword">import</span> ColumnTransformer
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 特征缩放与编码 ==="</span>)
+
+<span class="hljs-comment"># 创建示例数据</span>
+data = {
+    <span class="hljs-string">'年龄'</span>: [<span class="hljs-number">25</span>, <span class="hljs-number">30</span>, <span class="hljs-number">35</span>, <span class="hljs-number">28</span>, <span class="hljs-number">32</span>],
+    <span class="hljs-string">'收入'</span>: [<span class="hljs-number">50000</span>, <span class="hljs-number">60000</span>, <span class="hljs-number">55000</span>, <span class="hljs-number">52000</span>, <span class="hljs-number">58000</span>],
+    <span class="hljs-string">'城市'</span>: [<span class="hljs-string">'北京'</span>, <span class="hljs-string">'上海'</span>, <span class="hljs-string">'广州'</span>, <span class="hljs-string">'深圳'</span>, <span class="hljs-string">'北京'</span>],
+    <span class="hljs-string">'学历'</span>: [<span class="hljs-string">'本科'</span>, <span class="hljs-string">'硕士'</span>, <span class="hljs-string">'博士'</span>, <span class="hljs-string">'本科'</span>, <span class="hljs-string">'硕士'</span>]
+}
+
+df = pd.DataFrame(data)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"原始数据:"</span>)
+<span class="hljs-built_in">print</span>(df)
+
+<span class="hljs-comment"># 特征缩放 - 标准化</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 特征标准化 ==="</span>)
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(df[[<span class="hljs-string">'年龄'</span>, <span class="hljs-string">'收入'</span>]])
+df_scaled = pd.DataFrame(scaled_data, columns=[<span class="hljs-string">'年龄_标准化'</span>, <span class="hljs-string">'收入_标准化'</span>])
+<span class="hljs-built_in">print</span>(df_scaled)
+
+<span class="hljs-comment"># 特征缩放 - 归一化</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 特征归一化 ==="</span>)
+minmax_scaler = MinMaxScaler()
+normalized_data = minmax_scaler.fit_transform(df[[<span class="hljs-string">'年龄'</span>, <span class="hljs-string">'收入'</span>]])
+df_normalized = pd.DataFrame(normalized_data, columns=[<span class="hljs-string">'年龄_归一化'</span>, <span class="hljs-string">'收入_归一化'</span>])
+<span class="hljs-built_in">print</span>(df_normalized)
+
+<span class="hljs-comment"># 标签编码</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 标签编码 ==="</span>)
+label_encoder = LabelEncoder()
+df[<span class="hljs-string">'城市_编码'</span>] = label_encoder.fit_transform(df[<span class="hljs-string">'城市'</span>])
+df[<span class="hljs-string">'学历_编码'</span>] = label_encoder.fit_transform(df[<span class="hljs-string">'学历'</span>])
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"标签编码后的数据:"</span>)
+<span class="hljs-built_in">print</span>(df[[<span class="hljs-string">'城市'</span>, <span class="hljs-string">'城市_编码'</span>, <span class="hljs-string">'学历'</span>, <span class="hljs-string">'学历_编码'</span>]])
+
+<span class="hljs-comment"># 独热编码</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 独热编码 ==="</span>)
+onehot_encoder = OneHotEncoder(sparse_output=<span class="hljs-literal">False</span>)
+onehot_data = onehot_encoder.fit_transform(df[[<span class="hljs-string">'城市'</span>]])
+onehot_columns = onehot_encoder.get_feature_names_out([<span class="hljs-string">'城市'</span>])
+df_onehot = pd.DataFrame(onehot_data, columns=onehot_columns)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"独热编码后的数据:"</span>)
+<span class="hljs-built_in">print</span>(df_onehot)
+
+<span class="hljs-comment"># 组合所有处理后的特征</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 最终处理后的数据集 ==="</span>)
+df_final = pd.concat([df_scaled, df_normalized, df[[<span class="hljs-string">'城市_编码'</span>, <span class="hljs-string">'学历_编码'</span>]], df_onehot], axis=<span class="hljs-number">1</span>)
+<span class="hljs-built_in">print</span>(df_final)</code></pre>
+      
+      <h3>探索性数据分析</h3>
+      <pre><code><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">import</span> seaborn <span class="hljs-keyword">as</span> sns
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 探索性数据分析 ==="</span>)
+
+<span class="hljs-comment"># 创建示例数据集</span>
+np.random.seed(<span class="hljs-number">42</span>)
+n_samples = <span class="hljs-number">200</span>
+data = {
+    <span class="hljs-string">'年龄'</span>: np.random.normal(<span class="hljs-number">35</span>, <span class="hljs-number">10</span>, n_samples),
+    <span class="hljs-string">'收入'</span>: np.random.normal(<span class="hljs-number">50000</span>, <span class="hljs-number">15000</span>, n_samples),
+    <span class="hljs-string">'消费分数'</span>: np.random.normal(<span class="hljs-number">70</span>, <span class="hljs-number">15</span>, n_samples),
+    <span class="hljs-string">'城市'</span>: np.random.choice([<span class="hljs-string">'北京'</span>, <span class="hljs-string">'上海'</span>, <span class="hljs-string">'广州'</span>, <span class="hljs-string">'深圳'</span>], n_samples),
+    <span class="hljs-string">'性别'</span>: np.random.choice([<span class="hljs-string">'男'</span>, <span class="hljs-string">'女'</span>], n_samples)
+}
+
+df = pd.DataFrame(data)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"数据集基本信息:"</span>)
+<span class="hljs-built_in">print</span>(df.info())
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n数据集描述性统计:"</span>)
+<span class="hljs-built_in">print</span>(df.describe())
+
+<span class="hljs-comment"># 数据分布可视化</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 数据分布分析 ==="</span>)
+fig, axes = plt.subplots(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, figsize=(<span class="hljs-number">12</span>, <span class="hljs-number">10</span>))
+
+<span class="hljs-comment"># 年龄分布</span>
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].hist(df[<span class="hljs-string">'年龄'</span>], bins=<span class="hljs-number">20</span>, color=<span class="hljs-string">'skyblue'</span>, alpha=<span class="hljs-number">0.7</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].set_title(<span class="hljs-string">'年龄分布'</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].set_xlabel(<span class="hljs-string">'年龄'</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>].set_ylabel(<span class="hljs-string">'频数'</span>)
+
+<span class="hljs-comment">// 收入分布</span>
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].hist(df[<span class="hljs-string">'收入'</span>], bins=<span class="hljs-number">20</span>, color=<span class="hljs-string">'lightcoral'</span>, alpha=<span class="hljs-number">0.7</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].set_title(<span class="hljs-string">'收入分布'</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].set_xlabel(<span class="hljs-string">'收入'</span>)
+axes[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>].set_ylabel(<span class="hljs-string">'频数'</span>)
+
+<span class="hljs-comment">// 消费分数箱线图</span>
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].boxplot(df[<span class="hljs-string">'消费分数'</span>])
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].set_title(<span class="hljs-string">'消费分数箱线图'</span>)
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>].set_ylabel(<span class="hljs-string">'消费分数'</span>)
+
+<span class="hljs-comment">// 城市分布</span>
+city_counts = df[<span class="hljs-string">'城市'</span>].value_counts()
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].bar(city_counts.index, city_counts.values, color=[<span class="hljs-string">'skyblue'</span>, <span class="hljs-string">'lightcoral'</span>, <span class="hljs-string">'lightgreen'</span>, <span class="hljs-string">'gold'</span>])
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].set_title(<span class="hljs-string">'城市分布'</span>)
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].set_xlabel(<span class="hljs-string">'城市'</span>)
+axes[<span class="hljs-number">1</span>, <span class="hljs-number">1</span>].set_ylabel(<span class="hljs-string">'人数'</span>)
+
+plt.tight_layout()
+plt.show()
+
+<span class="hljs-comment">// 相关性分析</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 相关性分析 ==="</span>)
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+correlation_matrix = df[numeric_cols].corr()
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"数值变量相关性矩阵:"</span>)
+<span class="hljs-built_in">print</span>(correlation_matrix)
+
+<span class="hljs-comment">// 相关性热力图</span>
+plt.figure(figsize=(<span class="hljs-number">8</span>, <span class="hljs-number">6</span>))
+sns.heatmap(correlation_matrix, annot=<span class="hljs-literal">True</span>, cmap=<span class="hljs-string">'coolwarm'</span>, center=<span class="hljs-number">0</span>)
+plt.title(<span class="hljs-string">'变量相关性热力图'</span>)
+plt.show()
+
+<span class="hljs-comment">// 分组分析</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 分组分析 ==="</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"不同城市的平均收入:"</span>)
+<span class="hljs-built_in">print</span>(df.groupby(<span class="hljs-string">'城市'</span>)[<span class="hljs-string">'收入'</span>].mean())
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n不同性别的平均消费分数:"</span>)
+<span class="hljs-built_in">print</span>(df.groupby(<span class="hljs-string">'性别'</span>)[<span class="hljs-string">'消费分数'</span>].mean())
+
+<span class="hljs-comment">// 散点图分析关系</span>
+plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">6</span>))
+sns.scatterplot(data=df, x=<span class="hljs-string">'年龄'</span>, y=<span class="hljs-string">'收入'</span>, hue=<span class="hljs-string">'城市'</span>, style=<span class="hljs-string">'性别'</span>, s=<span class="hljs-number">100</span>)
+plt.title(<span class="hljs-string">'年龄与收入关系散点图'</span>)
+plt.show()</code></pre>
+    </div>
+    
+    <div class="card">
+      <h2>子页面导航</h2>
+      <ul class="list">
+        <li><a href="chapter10_1.html">10.1 缺失/异常值处理</a></li>
+        <li><a href="chapter10_2.html">10.2 特征缩放与编码</a></li>
+        <li><a href="chapter10_3.html">10.3 探索性数据分析</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第11章 · 数据分析与统计方法</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1{margin:8px 0 12px}
+    h2{margin-top:28px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+    h3{margin-top:24px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-top:24px}
+    .list{padding-left:24px;line-height:1.8}
+    .list li{margin-bottom:10px}
+    .linkback{display:inline-flex;align-items:center;margin-top:14px;padding:8px 16px;background:#f1f5f9;border-radius:8px;font-weight:500}
+    .linkback:hover{background:#e2e8f0}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0;font-family:Monaco,Consolas,monospace}
+    pre {
+      background: #f6f8fa;
+      color: #24292e;
+      padding: 20px;
+      border-radius: 6px;
+      overflow: auto;
+      margin: 20px 0;
+      line-height: 1.45;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
+      border: 1px solid #e1e4e8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: 14px;
+    }
+    .note{background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+    .chapter-nav{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-top:32px}
+    .chapter-card{background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s ease}
+    .chapter-card:hover{transform:translateY(-4px);box-shadow:0 12px 20px rgba(2,8,23,.08)}
+    .chapter-card h3{margin-top:0;font-size:18px}
+    .chapter-number{display:inline-block;background:#0ea5e9;color:white;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;margin-right:10px;font-weight:bold}
+    
+    /* Jupyter Notebook风格语法高亮 */
+    .hljs-comment,
+    .hljs-quote {color: #8c8c8c; font-style: italic;}
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {color: #d73a49;}
+    .hljs-number,
+    .hljs-literal {color: #005cc5;}
+    .hljs-string,
+    .hljs-doctag,
+    .hljs-formula {color: #032f62;}
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {color: #6f42c1;}
+    .hljs-built_in,
+    .hljs-class .hljs-title {color: #6f42c1;}
+    .hljs-params {color: #24292e;}
+    .hljs-attribute {color: #6f42c1;}
+    .hljs-name {color: #22863a;}
+    .hljs-tag {color: #22863a;}
+    .hljs-variable,
+    .hljs-template-variable {color: #e36209;}
+    .hljs-regexp,
+    .hljs-link {color: #d73a49;}
+    .hljs-symbol,
+    .hljs-bullet {color: #e36209;}
+    .hljs-meta {color: #6f42c1;}
+    .hljs-meta .hljs-keyword {color: #6f42c1;}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a class="linkback" href="index.html">← 返回首页</a>
+    <h1>第11章 · 数据分析与统计方法</h1>
+    
+    <div class="card">
+      <h2>数据分析与统计方法</h2>
+      <p>统计分析是数据科学的核心，帮助我们从数据中提取有意义的洞察。本章涵盖从描述性统计到推断性统计，从数据分组到相关回归分析的全套统计方法。</p>
+      
+      <div class="note">
+        <strong>学习目标：</strong>掌握描述性和推断性统计分析，理解数据分组与聚合技术，学会相关与回归分析，并能运用这些方法解决实际问题。
+      </div>
+      
+      <h3>本章内容概览</h3>
+      <ul class="list">
+        <li>描述性统计：数据基本特征分析</li>
+        <li>推断性统计：从样本推断总体</li>
+        <li>数据分组与聚合：分类和汇总分析</li>
+        <li>相关与回归分析：变量关系建模</li>
+        <li>案例分析：实际项目实践</li>
+        <li>方法应用指南：场景与方法选择</li>
+      </ul>
+      
+      <h3>描述性统计分析</h3>
+      <pre><code><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-comment"># 创建示例数据</span>
+data = {
+    <span class="hljs-string">'年龄'</span>: np.random.normal(<span class="hljs-number">35</span>, <span class="hljs-number">8</span>, <span class="hljs-number">100</span>),
+    <span class="hljs-string">'收入'</span>: np.random.normal(<span class="hljs-number">50000</span>, <span class="hljs-number">15000</span>, <span class="hljs-number">100</span>)
+}
+df = pd.DataFrame(data)
+
+<span class="hljs-comment">// 描述性统计</span>
+<span class="hljs-built_in">print</span>(df.describe())
+
+<span class="hljs-comment">// 偏度和峰度</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"年龄偏度: <span class="hljs-subst">{df[<span class="hljs-string">'年龄'</span>].skew():.<span class="hljs-number">3</span>f}</span>"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"收入峰度: <span class="hljs-subst">{df[<span class="hljs-string">'收入'</span>].kurtosis():.<span class="hljs-number">3</span>f}</span>"</span>)</code></pre>
+      
+      <h3>推断性统计</h3>
+      <pre><code><span class="hljs-keyword">from</span> scipy <span class="hljs-keyword">import</span> stats
+
+<span class="hljs-comment">// 创建两组样本</span>
+group_a = np.random.normal(<span class="hljs-number">75</span>, <span class="hljs-number">10</span>, <span class="hljs-number">50</span>)
+group_b = np.random.normal(<span class="hljs-number">72</span>, <span class="hljs-number">12</span>, <span class="hljs-number">50</span>)
+
+<span class="hljs-comment">// 独立样本t检验</span>
+t_stat, p_value = stats.ttest_ind(group_a, group_b)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"t统计量: <span class="hljs-subst">{t_stat:.3f}</span>, p值: <span class="hljs-subst">{p_value:.3f}</span>"</span>)
+
+<span class="hljs-keyword">if</span> p_value &lt; <span class="hljs-number">0.05</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"两组均值有显著差异"</span>)</code></pre>
+      
+      <h3>数据分组与聚合</h3>
+      <pre><code><span class="hljs-comment">// 创建含分类变量的数据</span>
+data = {
+    <span class="hljs-string">'地区'</span>: np.random.choice([<span class="hljs-string">'东部'</span>, <span class="hljs-string">'西部'</span>, <span class="hljs-string">'南部'</span>], <span class="hljs-number">100</span>),
+    <span class="hljs-string">'销售额'</span>: np.random.uniform(<span class="hljs-number">1000</span>, <span class="hljs-number">50000</span>, <span class="hljs-number">100</span>)
+}
+df = pd.DataFrame(data)
+
+<span class="hljs-comment">// 分组统计</span>
+region_stats = df.groupby(<span class="hljs-string">'地区'</span>)[<span class="hljs-string">'销售额'</span>].agg([<span class="hljs-string">'mean'</span>, <span class="hljs-string">'sum'</span>, <span class="hljs-string">'count'</span>])
+<span class="hljs-built_in">print</span>(region_stats)
+
+<span class="hljs-comment">// 透视表</span>
+pivot = pd.pivot_table(df, values=<span class="hljs-string">'销售额'</span>, index=<span class="hljs-string">'地区'</span>, aggfunc=<span class="hljs-string">'mean'</span>)
+<span class="hljs-built_in">print</span>(pivot)</code></pre>
+      
+      <h3>相关与回归分析</h3>
+      <pre><code><span class="hljs-keyword">from</span> scipy.stats <span class="hljs-keyword">import</span> pearsonr
+<span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LinearRegression
+
+<span class="hljs-comment">// 创建示例数据</span>
+X = np.random.normal(<span class="hljs-number">50</span>, <span class="hljs-number">15</span>, <span class="hljs-number">100</span>)  <span class="hljs-comment">// 广告投入</span>
+Y = <span class="hljs-number">2</span> * X + <span class="hljs-number">30</span> + np.random.normal(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, <span class="hljs-number">100</span>)  <span class="hljs-comment">// 销售额</span>
+
+<span class="hljs-comment">// 相关分析</span>
+corr, p_value = pearsonr(X, Y)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"相关系数: <span class="hljs-subst">{corr:.3f}</span>"</span>)
+
+<span class="hljs-comment">// 线性回归</span>
+X_reshaped = X.reshape(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>)
+model = LinearRegression()
+model.fit(X_reshaped, Y)
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"系数: <span class="hljs-subst">{model.coef_[0]:.3f}</span>, 截距: <span class="hljs-subst">{model.intercept_:.3f}</span>"</span>)</code></pre>
+      
+      <h3>案例分析</h3>
+      <pre><code><span class="hljs-comment">// 电商数据分析案例</span>
+data = {
+    <span class="hljs-string">'年龄'</span>: np.random.normal(<span class="hljs-number">35</span>, <span class="hljs-number">10</span>, <span class="hljs-number">200</span>),
+    <span class="hljs-string">'收入'</span>: np.random.normal(<span class="hljs-number">50000</span>, <span class="hljs-number">20000</span>, <span class="hljs-number">200</span>),
+    <span class="hljs-string">'访问频率'</span>: np.random.poisson(<span class="hljs-number">8</span>, <span class="hljs-number">200</span>),
+    <span class="hljs-string">'地区'</span>: np.random.choice([<span class="hljs-string">'东部'</span>, <span class="hljs-string">'西部'</span>, <span class="hljs-string">'南部'</span>], <span class="hljs-number">200</span>)
+}
+
+df = pd.DataFrame(data)
+
+<span class="hljs-comment">// 地区分组分析</span>
+region_analysis = df.groupby(<span class="hljs-string">'地区'</span>).agg({
+    <span class="hljs-string">'收入'</span>: <span class="hljs-string">'mean'</span>,
+    <span class="hljs-string">'访问频率'</span>: <span class="hljs-string">'mean'</span>
+})
+<span class="hljs-built_in">print</span>(region_analysis)</code></pre>
+      
+      <h3>方法应用指南</h3>
+      <pre><code><span class="hljs-comment">// 数据分析方法选择指南</span>
+methods_guide = {
+    <span class="hljs-string">"了解数据特征"</span>: <span class="hljs-string">"描述性统计"</span>,
+    <span class="hljs-string">"比较组间差异"</span>: <span class="hljs-string">"t检验/方差分析"</span>,
+    <span class="hljs-string">"分析变量关系"</span>: <span class="hljs-string">"相关分析"</span>,
+    <span class="hljs-string">"预测建模"</span>: <span class="hljs-string">"回归分析"</span>,
+    <span class="hljs-string">"分类分析"</span>: <span class="hljs-string">"分组聚合"</span>
+}
+
+<span class="hljs-keyword">for</span> scenario, method <span class="hljs-keyword">in</span> methods_guide.items():
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f"<span class="hljs-subst">{scenario}</span> → <span class="hljs-subst">{method}</span>"</span>)</code></pre>
+    </div>
+    
+    <div class="card">
+      <h2>子页面导航</h2>
+      <ul class="list">
+        <li><a href="chapter11_1.html">11.1 数据分析与描述性统计方法入门</a></li>
+        <li><a href="chapter11_2.html">11.2 推断性统计入门</a></li>
+        <li><a href="chapter11_3.html">11.3 数据分组与聚合入门</a></li>
+        <li><a href="chapter11_4.html">11.4 数据的相关分析与回归分析入门</a></li>
+        <li><a href="chapter11_5.html">11.5 案例分析</a></li>
+        <li><a href="chapter11_6.html">11.6 数据分析中的常用方法及运用场景</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

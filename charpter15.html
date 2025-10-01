@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第15章 · 数据抓取与数据伦理</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1,h2{margin:8px 0 12px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:18px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-bottom:24px}
+    .list{padding-left:18px}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0}
+    pre{background:#0b1220;color:#e2e8f0;padding:14px;border-radius:12px;overflow:auto}
+    .navlinks{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .chip{display:inline-block;border:1px solid #e2e8f0;border-radius:999px;padding:4px 10px;background:#fff}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a href="index.html">← 返回首页</a>
+    <h1>第15章 · 数据抓取与数据伦理</h1>
+    <div class="card">
+      <h2>导航</h2>
+      <ul class="list">
+        <li><a href="chapter15_1.html">15.1 requests/bs4 基础爬取</a></li>
+        <li><a href="chapter15_2.html">15.2 反爬/限速/robots 合规</a></li>
+        <li><a href="chapter15_3.html">15.3 数据伦理与合规清单</a></li>
+      </ul>
+    </div>
+
+    <!-- 新增内容 -->
+    <div class="card">
+      <h2>15.1 requests/bs4 基础爬取</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>Requests库：发送HTTP请求，获取网页内容</li>
+        <li>BeautifulSoup：解析HTML/XML文档，提取数据</li>
+        <li>选择器使用：CSS选择器、标签属性定位</li>
+        <li>数据提取：文本内容、链接、图片、表格等</li>
+        <li>基础流程：请求→解析→提取→存储</li>
+      </ul>
+      <p>Requests和BeautifulSoup是Python中最基础且强大的网页抓取工具组合。</p>
+    </div>
+
+    <div class="card">
+      <h2>15.2 反爬/限速/robots 合规</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>反爬机制：User-Agent轮换、IP代理、验证码处理</li>
+        <li>请求限速：设置请求间隔，避免被封IP</li>
+        <li>Robots协议：尊重网站的爬取规则和限制</li>
+        <li>会话保持：使用Session维持登录状态</li>
+        <li>异步爬取：提高效率的同时注意合规性</li>
+      </ul>
+      <p>合规的数据抓取需要在效率与尊重网站规则之间找到平衡。</p>
+    </div>
+
+    <div class="card">
+      <h2>15.3 数据伦理与合规清单</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>数据伦理原则：尊重隐私、知情同意、最小必要</li>
+        <li>法律法规：GDPR、网络安全法、个人信息保护法</li>
+        <li>学术伦理：数据引用、版权尊重、研究诚信</li>
+        <li>合规清单：检查数据来源、使用目的、存储安全</li>
+        <li>数据匿名化：保护个人隐私的技术手段</li>
+      </ul>
+      <p>数据伦理是数据科学工作的底线，必须在技术实施前优先考虑。</p>
+    </div>
+  </div>
+</body>
+</html>

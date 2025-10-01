@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第12章 · NLP常用工具与文本挖掘</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1,h2{margin:8px 0 12px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:18px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-bottom:24px}
+    .list{padding-left:18px}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0}
+    pre{background:#0b1220;color:#e2e8f0;padding:14px;border-radius:12px;overflow:auto}
+    .navlinks{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .chip{display:inline-block;border:1px solid #e2e8f0;border-radius:999px;padding:4px 10px;background:#fff}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a href="index.html">← 返回首页</a>
+    <h1>第12章 · NLP常用工具与文本挖掘</h1>
+    <div class="card">
+      <h2>导航</h2>
+      <ul class="list">
+        <li><a href="chapter12_1.html">12.1 分词与词性标注</a></li>
+        <li><a href="chapter12_2.html">12.2 词频统计与TF-IDF</a></li>
+        <li><a href="chapter12_3.html">12.3 文本预处理与停用词</a></li>
+      </ul>
+    </div>
+
+    <!-- 新增内容 -->
+    <div class="card">
+      <h2>12.1 分词与词性标注</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>中文分词：将连续的中文文本切分成有意义的词语序列</li>
+        <li>常用分词工具：Jieba、HanLP、SnowNLP等</li>
+        <li>词性标注：为每个词语标注其词性（名词、动词、形容词等）</li>
+        <li>分词算法：基于规则、基于统计、深度学习等方法</li>
+      </ul>
+      <p>分词是中文NLP处理的第一步，直接影响后续任务效果。</p>
+    </div>
+
+    <div class="card">
+      <h2>12.2 词频统计与TF-IDF</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>词频统计：计算词语在文档中出现的频率</li>
+        <li>TF-IDF：衡量词语在文档集合中的重要程度</li>
+        <li>TF（词频）：词语在文档中出现的次数</li>
+        <li>IDF（逆文档频率）：衡量词语普遍重要性的指标</li>
+        <li>应用场景：关键词提取、文本相似度计算、搜索引擎</li>
+      </ul>
+      <p>TF-IDF是文本挖掘中最常用的特征提取方法之一。</p>
+    </div>
+
+    <div class="card">
+      <h2>12.3 文本预处理与停用词</h2>
+      <p><strong>核心内容：</strong></p>
+      <ul>
+        <li>文本清洗：去除HTML标签、特殊字符、标点符号等</li>
+        <li>大小写转换：统一文本大小写格式</li>
+        <li>停用词过滤：去除无实际意义的常用词（的、是、在等）</li>
+        <li>文本规范化：数字替换、英文词形还原等</li>
+        <li>预处理流程：直接影响后续NLP任务的质量</li>
+      </ul>
+      <p>文本预处理是NLP任务的基础，能显著提升模型性能。</p>
+    </div>
+  </div>
+</body>
+</html>

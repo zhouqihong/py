@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第6章 · 函数与模块</title>
+  
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#ffffff;color:#0f172a}
+    .wrap{max-width:900px;margin:0 auto;padding:32px 20px}
+    h1{margin:8px 0 12px}
+    h2{margin-top:28px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+    h3{margin-top:24px}
+    a{color:#0ea5e9;text-decoration:none}
+    a:hover{color:#0284c7}
+    .card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;background:#fff;box-shadow:0 8px 30px rgba(2,8,23,.06);margin-top:24px}
+    .list{padding-left:24px;line-height:1.8}
+    .list li{margin-bottom:10px}
+    .linkback{display:inline-flex;align-items:center;margin-top:14px;padding:8px 16px;background:#f1f5f9;border-radius:8px;font-weight:500}
+    .linkback:hover{background:#e2e8f0}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px;border:1px solid #e2e8f0;font-family:Monaco,Consolas,monospace}
+    pre {
+      background: #f6f8fa;
+      color: #24292e;
+      padding: 20px;
+      border-radius: 6px;
+      overflow: auto;
+      margin: 20px 0;
+      line-height: 1.45;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
+      border: 1px solid #e1e4e8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: 14px;
+    }
+    .note{background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0}
+    .chapter-nav{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-top:32px}
+    .chapter-card{background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s ease}
+    .chapter-card:hover{transform:translateY(-4px);box-shadow:0 12px 20px rgba(2,8,23,.08)}
+    .chapter-card h3{margin-top:0;font-size:18px}
+    .chapter-number{display:inline-block;background:#0ea5e9;color:white;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;margin-right:10px;font-weight:bold}
+    
+    /* Jupyter Notebook风格语法高亮 */
+    .hljs-comment,
+    .hljs-quote {color: #8c8c8c; font-style: italic;}
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {color: #d73a49;}
+    .hljs-number,
+    .hljs-literal {color: #005cc5;}
+    .hljs-string,
+    .hljs-doctag,
+    .hljs-formula {color: #032f62;}
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {color: #6f42c1;}
+    .hljs-built_in,
+    .hljs-class .hljs-title {color: #6f42c1;}
+    .hljs-params {color: #24292e;}
+    .hljs-attribute {color: #6f42c1;}
+    .hljs-name {color: #22863a;}
+    .hljs-tag {color: #22863a;}
+    .hljs-variable,
+    .hljs-template-variable {color: #e36209;}
+    .hljs-regexp,
+    .hljs-link {color: #d73a49;}
+    .hljs-symbol,
+    .hljs-bullet {color: #e36209;}
+    .hljs-meta {color: #6f42c1;}
+    .hljs-meta .hljs-keyword {color: #6f42c1;}
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <a class="linkback" href="index.html">← 返回首页</a>
+    <h1>第6章 · 函数与模块</h1>
+    
+    <div class="card">
+      <h2>Python函数与模块</h2>
+      <p>函数和模块是Python编程中组织和重用代码的核心机制。本章将介绍函数的定义与使用、不同类型的函数、高阶函数的概念，以及模块的创建和导入方法，最后还将探索大语言模型在Python中的应用实践。</p>
+      
+      <div class="note">
+        <strong>学习目标：</strong>完成本章后，您将能够定义和使用函数，理解不同类型函数的特点，掌握模块的创建和导入，并了解如何在实际项目中应用大语言模型API。
+      </div>
+      
+      <h3>本章内容概览</h3>
+      <ul class="list">
+        <li>函数定义与参数：位置参数、关键字参数、默认参数</li>
+        <li>函数的类型：内置函数、用户定义函数、lambda函数</li>
+        <li>高阶函数：map、filter、reduce等函数式编程工具</li>
+        <li>模块：创建、导入和使用Python模块</li>
+        <li>大语言模型实践：使用Python调用大语言模型API</li>
+      </ul>
+      
+      <h3>函数与模块示例</h3>
+      <pre><code><span class="hljs-comment"># 函数定义与参数示例</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"=== 函数定义与参数 ==="</span>)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">greet</span>(<span class="hljs-params">name, greeting=<span class="hljs-string">"Hello"</span></span>):
+    <span class="hljs-string">"""简单的问候函数"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">f"<span class="hljs-subst">{greeting}</span>, <span class="hljs-subst">{name}</span>!"</span>
+
+<span class="hljs-built_in">print</span>(greet(<span class="hljs-string">"Alice"</span>))
+<span class="hljs-built_in">print</span>(greet(<span class="hljs-string">"Bob"</span>, <span class="hljs-string">"Hi"</span>))
+<span class="hljs-built_in">print</span>(greet(greeting=<span class="hljs-string">"Welcome"</span>, name=<span class="hljs-string">"Charlie"</span>))
+
+<span class="hljs-comment"># lambda函数示例</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== Lambda函数 ==="</span>)
+square = <span class="hljs-keyword">lambda</span> x: x * x
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"5的平方: <span class="hljs-subst">{square(<span class="hljs-number">5</span>)}</span>"</span>)
+
+<span class="hljs-comment"># 高阶函数示例</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 高阶函数 ==="</span>)
+numbers = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+squared = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x: x * x, numbers))
+even_numbers = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">filter</span>(<span class="hljs-keyword">lambda</span> x: x % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>, numbers))
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"原始列表: <span class="hljs-subst">{numbers}</span>"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"平方后的列表: <span class="hljs-subst">{squared}</span>"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"偶数列表: <span class="hljs-subst">{even_numbers}</span>"</span>)
+
+<span class="hljs-comment"># 模块使用示例</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 模块使用 ==="</span>)
+<span class="hljs-keyword">import</span> math
+<span class="hljs-keyword">import</span> datetime
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"π的近似值: <span class="hljs-subst">{math.pi}</span>"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"16的平方根: <span class="hljs-subst">{math.sqrt(<span class="hljs-number">16</span>)}</span>"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f"当前日期和时间: <span class="hljs-subst">{datetime.datetime.now()}</span>"</span>)
+
+<span class="hljs-comment"># 大语言模型实践示例（概念性）</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"\n=== 大语言模型实践 ==="</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"在实际应用中，可以使用openai、transformers等库"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"调用大语言模型API进行文本生成、分类等任务"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"示例: response = openai.ChatCompletion.create(...)"</span>)</code></pre>
+    </div>
+    
+    <div class="card">
+      <h2>导航</h2>
+      <ul class="list">
+        <li><a href="chapter6_1.html">6.1 函数定义与参数</a></li>
+        <li><a href="chapter6_2.html">6.2 函数的类型</a></li>
+        <li><a href="chapter6_3.html">6.3 高阶函数</a></li>
+        <li><a href="chapter6_4.html">6.4 模块</a></li>
+        <li><a href="chapter6_5.html">6.5 大语言模型实践</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
