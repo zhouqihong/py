@@ -73,10 +73,162 @@
     .hljs-bullet {color: #e36209;}
     .hljs-meta {color: #6f42c1;}
     .hljs-meta .hljs-keyword {color: #6f42c1;}
+    
+    /* DeepSeek学伴样式 */
+    .deepseek-card {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px solid #bae6fd;
+    }
+    .deepseek-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .deepseek-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
+      font-weight: bold;
+    }
+    .deepseek-chat {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .message {
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+    }
+    .user-message {
+      background: #0ea5e9;
+      color: white;
+      margin-left: auto;
+    }
+    .ai-message {
+      background: white;
+      border: 1px solid #e2e8f0;
+    }
+    .deepseek-input {
+      display: flex;
+      gap: 10px;
+    }
+    .deepseek-input textarea {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      resize: vertical;
+      min-height: 60px;
+      font-family: inherit;
+    }
+    .deepseek-input button {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .deepseek-input button:hover {
+      background: #0284c7;
+    }
+    .deepseek-input button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    .typing-indicator {
+      display: inline-block;
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      color: #64748b;
+      font-style: italic;
+    }
+    .dot-flashing {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #64748b;
+      color: #64748b;
+      animation: dot-flashing 1s infinite linear alternate;
+      animation-delay: 0.5s;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    .dot-flashing::before, .dot-flashing::after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: 0;
+    }
+    .dot-flashing::before {
+      left: -15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #64748b;
+      color: #64748b;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 0s;
+    }
+    .dot-flashing::after {
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #64748b;
+      color: #64748b;
+      animation: dot-flashing 1s infinite alternate;
+      animation-delay: 1s;
+    }
+    @keyframes dot-flashing {
+      0% {
+        background-color: #64748b;
+      }
+      50%, 100% {
+        background-color: rgba(100, 116, 139, 0.2);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <!-- DeepSeek学伴模块 -->
+    <div class="card deepseek-card">
+      <div class="deepseek-header">
+        <div class="deepseek-icon">DS</div>
+        <h2 style="margin:0">DeepSeek学伴</h2>
+      </div>
+      <p>我是您的Python学习助手，可以解答关于Python、数据科学和编程的问题。</p>
+      
+      <div class="deepseek-chat" id="chat-container">
+        <div class="message ai-message">
+          您好！我是DeepSeek学伴，可以为您解答Python和数据科学相关的问题。请问有什么可以帮助您的吗？
+        </div>
+      </div>
+      
+      <div class="deepseek-input">
+        <textarea id="user-input" placeholder="请输入您的问题..."></textarea>
+        <button id="send-btn">发送</button>
+      </div>
+    </div>
+    
     <a class="linkback" href="index.html">← 返回首页</a>
     <h1>第一章 · Python简介与工具安装</h1>
     
@@ -124,7 +276,7 @@ data = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">3
     </div>
     
     <div class="card">
-      <h2>导航</h2>
+      <h2>子页面导航</h2>
       <ul class="list">
         <li><a href="chapter1_1.html">1.1 课程简介</a></li>
         <li><a href="chapter1_2.html">1.2 Jupyter notebook的安装与使用</a></li>
@@ -134,5 +286,125 @@ data = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">3
       </ul>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatContainer = document.getElementById('chat-container');
+      const userInput = document.getElementById('user-input');
+      const sendBtn = document.getElementById('send-btn');
+      
+      const API_KEY = 'sk-03543c891dbc4c2b84bf8eec9e8b0e89';
+      const API_URL = 'https://api.deepseek.com/v1/chat/completions';
+      
+      // 添加消息到聊天容器
+      function addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+        messageDiv.textContent = content;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      // 显示正在输入指示器
+      function showTypingIndicator() {
+        const indicatorDiv = document.createElement('div');
+        indicatorDiv.className = 'message ai-message';
+        indicatorDiv.id = 'typing-indicator';
+        indicatorDiv.innerHTML = '<span class="typing-indicator">思考中<span class="dot-flashing"></span></span>';
+        chatContainer.appendChild(indicatorDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      // 隐藏正在输入指示器
+      function hideTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+          indicator.remove();
+        }
+      }
+      
+      // 发送消息到DeepSeek API
+      async function sendMessageToAI(message) {
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+              model: 'deepseek-chat',
+              messages: [
+                {
+                  role: 'system',
+                  content: '你是一个Python数据科学学习助手，专门帮助学生学习Python编程和数据科学相关知识。请用中文回答所有问题。'
+                },
+                {
+                  role: 'user',
+                  content: message
+                }
+              ],
+              max_tokens: 1000,
+              temperature: 0.7
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`API请求失败: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          return data.choices[0].message.content;
+        } catch (error) {
+          console.error('API调用错误:', error);
+          return `抱歉，我暂时无法回答您的问题。错误信息: ${error.message}`;
+        }
+      }
+      
+      // 处理发送消息
+      async function handleSendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        // 添加用户消息
+        addMessage(message, true);
+        userInput.value = '';
+        sendBtn.disabled = true;
+        
+        // 显示正在输入指示器
+        showTypingIndicator();
+        
+        try {
+          // 获取AI响应
+          const aiResponse = await sendMessageToAI(message);
+          
+          // 隐藏指示器并添加AI响应
+          hideTypingIndicator();
+          addMessage(aiResponse);
+        } catch (error) {
+          hideTypingIndicator();
+          addMessage('抱歉，发生了错误，请稍后再试。');
+        }
+        
+        sendBtn.disabled = false;
+      }
+      
+      // 事件监听
+      sendBtn.addEventListener('click', handleSendMessage);
+      
+      userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      });
+      
+      // 自动调整输入框高度
+      userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+    });
+  </script>
 </body>
 </html>
